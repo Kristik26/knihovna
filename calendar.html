@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalendář čtení – Knihovna</title>
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="book-sheet calendar-page-wrapper">
+    <!-- Horní lišta -->
+    <div class="sheet-actions">
+      <button class="btn-secondary" onclick="window.location.href='index.html'">← Zpět do knihovny</button>
+      <h1 class="main-title" style="margin: 0;">Kalendář čtení</h1>
+      <div style="width: 140px;"></div>
+    </div>
+
+    <!-- Přepínač měsíců a roků -->
+    <div class="calendar-controls">
+      <button class="cal-nav-btn" onclick="changeMonth(-1)" title="Předchozí měsíc">◀</button>
+      <div id="currentMonthLabel" class="cal-month-title">Říjen 2026</div>
+      <button class="cal-nav-btn" onclick="changeMonth(1)" title="Další měsíc">▶</button>
+    </div>
+
+    <!-- Souhrn měsíce -->
+    <div id="monthSummary" class="cal-summary"></div>
+
+    <!-- Seznam přečtených knih v daném měsíci -->
+    <div id="calendarList" class="calendar-list">
+      <!-- Vygeneruje se přes calendar.js -->
+    </div>
+  </div>
+
+  <script src="calendar.js"></script>
+</body>
+</html>

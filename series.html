@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Série – Knihovna</title>
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="book-sheet series-page-wrapper">
+    <!-- Horní ovládací lišta -->
+    <div class="sheet-actions">
+      <button class="btn-secondary" onclick="window.location.href='index.html'">← Zpět do knihovny</button>
+
+      <h1 class="main-title" style="margin: 0;">SÉRIE</h1>
+
+      <!-- Přepínač mezi sériemi + tlačítko na vytvoření nové -->
+      <div class="series-selector-bar">
+        <select id="seriesSelect" onchange="selectSeries(this.value)"></select>
+        <button class="btn-small" onclick="createNewSeries()">+ Nová série</button>
+        <button class="btn-danger" style="padding: 6px 10px; font-size: 0.82rem;" onclick="deleteCurrentSeries()" title="Smazat záznam série">🗑</button>
+      </div>
+    </div>
+
+    <!-- Hlavní rozložení podle nákresu: Vlevo info + popis, Vpravo knihy vedle sebe -->
+    <div class="series-layout">
+      
+      <!-- Levý sloupec: AUTOR, SÉRIE, POPIS -->
+      <div class="series-left">
+        <div class="form-row">
+          <label>AUTOR</label>
+          <input type="text" id="s_author" placeholder="Automaticky dle knih..." oninput="saveSeriesMeta()">
+        </div>
+        <div class="form-row" style="margin-top: 10px;">
+          <label>SÉRIE</label>
+          <input type="text" id="s_name" readonly>
+        </div>
+
+        <div class="section-label" style="text-align: left; margin: 22px 0 6px 0;">POPIS</div>
+        <textarea id="s_description" class="lined-paper series-notes" placeholder="Poznámky k celé sérii, pořadí čtení, dojmy..." oninput="saveSeriesMeta()"></textarea>
+      </div>
+
+      <!-- Pravá část: Sloupce s knihami v sérii -->
+      <div class="series-books-strip" id="seriesBooksStrip">
+        <!-- Sloupce knih se vygenerují přes series.js -->
+      </div>
+
+    </div>
+  </div>
+
+  <script src="series.js"></script>
+</body>
+</html>

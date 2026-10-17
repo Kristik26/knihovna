@@ -20,14 +20,30 @@ let dragState = null;
 // ==========================================
 function openDB() {
   return new Promise((resolve, reject) => {
-    const req = indexedDB.open('VisualLibraryDB', 1);
+    const req = indexedDB.open('VisualLibraryDB', 5);
+
     req.onupgradeneeded = (e) => {
       const db = e.target.result;
       if (!db.objectStoreNames.contains('books')) {
         db.createObjectStore('books', { keyPath: 'id' });
       }
+      if (!db.objectStoreNames.contains('series')) {
+        db.createObjectStore('series', { keyPath: 'name' });
+      }
+      if (!db.objectStoreNames.contains('tbr')) {
+        db.createObjectStore('tbr', { keyPath: 'id' });
+      }
     };
-    req.onsuccess = () => resolve(req.result);
+
+    req.onsuccess = () => {
+      const db = req.result;
+      // DŮLEŽITÉ: Pokud jiná stránka potřebuje zvednout verzi DB, okamžitě uvolníme spojení
+      db.onversionchange = () => {
+        db.close();
+      };
+      resolve(db);
+    };
+
     req.onerror = () => reject(req.error);
   });
 }
@@ -183,6 +199,19 @@ function populateModalFields() {
   selectFormat(currentBook.format || 'physical');
   selectReread(currentBook.reread || '');
   renderMoodboard();
+  openDB().then(db => {
+  const tx = db.transaction('series', 'readonly');
+  const req = tx.objectStore('series').getAll();
+  req.onsuccess = () => {
+    const savedSeries = req.result || [];
+    const names = new Set(books.map(b => b.series).filter(Boolean));
+    savedSeries.forEach(s => names.add(s.name));
+    const dl = document.getElementById('existingSeriesList');
+    if (dl) {
+      dl.innerHTML = Array.from(names).map(n => `<option value="${n}">`).join('');
+    }
+  };
+});
 }
 
 // ==========================================

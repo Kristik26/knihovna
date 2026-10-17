@@ -12,18 +12,30 @@
 
   <!-- 1. HLAVNÍ OBRAZOVKA: KNIHOVNA -->
   <div id="libraryView" class="library-frame">
-    <header class="top-bar">
-      <button class="add-book-btn" onclick="openBookModal()" title="Přidat knihu">
-        <div class="book-icon">
-          <span>+</span>
-        </div>
-      </button>
+ <header class="top-bar">
+      <!-- Levý roh: Přidání knihy + TBR -->
+     <div class="left-top-actions">
+        <button class="add-book-btn" onclick="openBookModal()" title="Přidat knihu">
+          <div class="book-icon">
+            <span>+</span>
+          </div>
+        </button>
+
+        <button class="tbr-nav-btn" onclick="window.location.href='tbr.html'" title="Seznam knih k přečtení">
+          TBR
+        </button>
+
+        <button class="tbr-nav-btn" onclick="window.location.href='calendar.html'" title="Kalendář přečtených knih">
+          📅 Kalendář
+        </button>
+      </div>
 
       <h1 class="main-title">Knihovna</h1>
-
-      <div class="cat-corner" title="Mňau!">
+<div class="cat-corner" onclick="window.location.href='series.html'" title="Otevřít přehled sérií" style="cursor: pointer;">
+      <div class="cat-corner" title="Mňau!" >
         <div class="sleeping-cat">🐈</div>
         <div class="cat-books">
+          </div>
           <div class="c-book"></div>
           <div class="c-book"></div>
           <div class="c-book"></div>
@@ -90,7 +102,9 @@
           </div>
           <div class="form-row">
             <label>SÉRIE</label>
-            <input type="text" id="f_series">
+           <input type="text" id="f_series" list="existingSeriesList" placeholder="Vyber nebo napiš novou...">
+            <datalist id="existingSeriesList"></datalist>
+            
           </div>
 
           <!-- Formát (Kniha / E-kniha / Audiokniha) -->

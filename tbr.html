@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TBR – Seznam k přečtení</title>
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="book-sheet tbr-page-wrapper">
+    <!-- Horní lišta -->
+    <div class="sheet-actions">
+      <button class="btn-secondary" onclick="window.location.href='index.html'">← Zpět do knihovny</button>
+      <h1 class="main-title" style="margin: 0;">TBR – Co chci přečíst</h1>
+      <div style="width: 140px;"></div> <!-- Vyrovnání středu -->
+    </div>
+
+    <!-- Pole pro přidání nové položky přes + nebo Enter -->
+    <div class="tbr-add-bar">
+      <input type="text" id="tbrInput" placeholder="Napiš název knihy, autora nebo poznámku..." onkeydown="if(event.key==='Enter') addTbrItem()">
+      <button class="tbr-plus-btn" onclick="addTbrItem()" title="Přidat na seznam">+</button>
+    </div>
+
+    <!-- Samotný To-Do seznam -->
+    <div id="tbrList" class="tbr-list">
+      <!-- Položky se vykreslí přes tbr.js -->
+    </div>
+  </div>
+
+  <script src="tbr.js"></script>
+</body>
+</html>
