@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knihovna</title>
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 1. HLAVNÍ OBRAZOVKA: KNIHOVNA -->
+  <div id="libraryView" class="library-frame">
+    <header class="top-bar">
+      <button class="add-book-btn" onclick="openBookModal()" title="Přidat knihu">
+        <div class="book-icon">
+          <span>+</span>
+        </div>
+      </button>
+
+      <h1 class="main-title">Knihovna</h1>
+
+      <div class="cat-corner" title="Mňau!">
+        <div class="sleeping-cat">🐈</div>
+        <div class="cat-books">
+          <div class="c-book"></div>
+          <div class="c-book"></div>
+          <div class="c-book"></div>
+        </div>
+      </div>
+    </header>
+
+    <main id="bookshelf" class="bookshelf"></main>
+  </div>
+
+  <!-- 2. OBRAZOVKA: PŘIDÁNÍ / DETAIL KNIHY -->
+  <div id="bookModal" class="modal-overlay hidden">
+    <div class="book-sheet">
+      
+      <!-- Horní ovládací lišta karty -->
+      <div class="sheet-actions">
+        <button class="btn-secondary" onclick="closeBookModal()">← Zpět do knihovny</button>
+        <div class="right-actions">
+          <button id="deleteBookBtn" class="btn-danger hidden" onclick="deleteCurrentBook()">🗑 Smazat knihu</button>
+          <button class="btn-primary" onclick="saveCurrentBook()">💾 Uložit knihu</button>
+        </div>
+      </div>
+
+      <!-- HORNÍ SEKCE (3 sloupce podle nákresu) -->
+      <div class="top-grid">
+        
+        <!-- Levý sloupec: Přebal knihy + hvězdičky -->
+        <div class="cover-column">
+          <label class="cover-upload" id="coverPreviewBox" title="Klikni pro nahrání přebalu knihy">
+            <input type="file" id="coverInput" accept="image/*" hidden onchange="handleCoverUpload(event)">
+            <span id="coverPlaceholder">přebal<br>knihy</span>
+            <img id="coverPreviewImg" class="hidden" alt="Přebal">
+          </label>
+          <div class="stars-picker" id="leftStars"></div>
+        </div>
+
+        <!-- Střední sloupec: Základní údaje a Formát -->
+        <div class="meta-column">
+          <div class="form-row">
+            <label>NÁZEV</label>
+            <input type="text" id="f_title">
+          </div>
+          <div class="form-row">
+            <label>AUTOR</label>
+            <input type="text" id="f_author">
+          </div>
+          <div class="form-row">
+            <label>ŽÁNR</label>
+            <input type="text" id="f_genre">
+          </div>
+          <div class="form-row">
+            <label>POČET STRÁNEK</label>
+            <input type="number" id="f_pages">
+          </div>
+          <div class="form-row dates-row">
+            <label>DATUM od</label>
+            <input type="date" id="f_dateFrom">
+            <label class="inline-label">do</label>
+            <input type="date" id="f_dateTo">
+          </div>
+          <div class="form-row">
+            <label>ČAS</label>
+            <input type="text" id="f_time" placeholder="např. 8 hodin / 5 dní">
+          </div>
+          <div class="form-row">
+            <label>SÉRIE</label>
+            <input type="text" id="f_series">
+          </div>
+
+          <!-- Formát (Kniha / E-kniha / Audiokniha) -->
+          <div class="format-section">
+            <div class="section-label">FORMÁT</div>
+            <div class="format-icons">
+              <button type="button" class="icon-choice" data-format="physical" onclick="selectFormat('physical')" title="Fyzická kniha">📖</button>
+              <span class="divider">|</span>
+              <button type="button" class="icon-choice" data-format="ebook" onclick="selectFormat('ebook')" title="E-kniha / Čtečka">📱</button>
+              <span class="divider">|</span>
+              <button type="button" class="icon-choice" data-format="audio" onclick="selectFormat('audio')" title="Audiokniha">🎧</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pravý sloupec: Tabulka 1-10 + Celkové hodnocení + Spice + Typ + Číst znova -->
+        <div class="ratings-column">
+          <div class="criteria-box" id="criteriaBox">
+            <!-- Vygeneruje se v JS (kvalita psaní, úroveň příběhu, atd.) -->
+          </div>
+
+          <div class="sub-ratings-row">
+            <!-- Celkové hodnocení a Spice level -->
+            <div class="overall-and-spice">
+              <div class="section-label">CELKOVÉ HODNOCENÍ</div>
+              <div class="stars-picker green-highlight" id="mainStars"></div>
+
+              <div class="section-label" style="margin-top: 10px;">SPICE LEVEL</div>
+              <div class="spice-picker" id="spicePicker"></div>
+            </div>
+
+            <!-- Typ (Kniha, komiks, atd.) -->
+          <!-- Typ (3 textová tlačítka) -->
+            <div class="type-box">
+              <div class="section-label">TYP</div>
+              <div class="type-choices">
+                <button type="button" class="type-btn" data-type="KNIHA" onclick="selectBookType('KNIHA')">KNIHA</button>
+                <button type="button" class="type-btn" data-type="KOMIKS" onclick="selectBookType('KOMIKS')">KOMIKS</button>
+                <button type="button" class="type-btn" data-type="MANGA" onclick="selectBookType('MANGA')">MANGA</button>
+              </div>
+            </div>
+
+            <!-- Číst znova? -->
+            <div class="reread-box">
+              <div class="section-label">číst znova?</div>
+              <div class="reread-choices">
+                <button type="button" class="icon-choice" data-reread="yes" onclick="selectReread('yes')">👍</button>
+                <button type="button" class="icon-choice" data-reread="no" onclick="selectReread('no')">👎</button>
+                <button type="button" class="icon-choice" data-reread="maybe" onclick="selectReread('maybe')">❓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SPODNÍ SEKCE: POPIS A MOODBOARD -->
+      <div class="bottom-grid">
+        
+        <!-- Levý sloupec: Linkovaný popis -->
+        <div class="description-column">
+          <div class="section-label" style="text-align:left; margin-bottom: 6px;">POPIS</div>
+          <textarea id="f_description" class="lined-paper" placeholder="Moje poznámky, dojmy, oblíbené citáty..."></textarea>
+        </div>
+<!-- Pravý sloupec: Moodboard -->
+        <div class="moodboard-column">
+          <!-- Lišta umístěná přímo NAD rámečkem -->
+          <div class="moodboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span class="section-label" style="text-align: left;">
+              MOODBOARD <small style="font-weight: normal; color: #8a7a6c;">(můžeš nahrát obrázky nebo je vložit přes Ctrl+V)</small>
+            </span>
+            
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button type="button" id="editMoodboardBtn" class="btn-small" onclick="toggleMoodboardEdit()" title="Upravit moodboard">
+                ✏️ Upravit
+              </button>
+
+              <div id="moodboardEditTools" class="moodboard-controls hidden">
+                <label class="btn-small">
+                  + Přidat obrázek
+                  <input type="file" accept="image/*" multiple hidden onchange="handleMoodboardUpload(event)">
+                </label>
+                <div id="imgToolbar" class="img-toolbar hidden">
+                  <button type="button" onclick="changeZIndex(1)" title="Posunout do popředí">🔼</button>
+                  <button type="button" onclick="changeZIndex(-1)" title="Posunout do pozadí">🔽</button>
+                  <button type="button" onclick="scaleSelectedImg(25)" title="Zvětšit">➕</button>
+                  <button type="button" onclick="scaleSelectedImg(-25)" title="Zmenšit">➖</button>
+                  <button type="button" onclick="rotateSelectedImg(-8)" title="Natočit doleva">↺</button>
+                  <button type="button" onclick="rotateSelectedImg(8)" title="Natočit doprava">↻</button>
+                  <button type="button" class="danger" onclick="removeSelectedImg()" title="Smazat">✕</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Samotné plátno -->
+          <div id="moodboardCanvas" class="moodboard-canvas" onclick="deselectMoodboardImg(event)">
+            <div id="moodboardHint" class="moodboard-hint">
+              Moodboard je prázdný. Klikni na „✏️ Upravit“ pro přidání obrázků.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
+</body>
+</html>

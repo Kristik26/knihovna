@@ -1,0 +1,622 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #2b2623;
+  font-family: 'Nunito', sans-serif;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================
+   1. HLAVNÍ OBRAZOVKA (SKŘÍŇ S POLIČKAMI)
+   ========================================== */
+.library-frame {
+  width: 100%;
+  max-width: 1150px;
+  background-color: #d7b899;
+  border: 6px solid #8c6239;
+  border-radius: 6px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 30px;
+  background-color: #e6ccb2;
+  border-bottom: 6px solid #8c6239;
+}
+
+.add-book-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.add-book-btn:hover {
+  transform: scale(1.08);
+}
+
+.book-icon {
+  width: 48px;
+  height: 60px;
+  background: #fffdf9;
+  border: 3px solid #5c3d28;
+  border-left: 8px solid #5c3d28;
+  border-radius: 3px 6px 6px 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: #5c3d28;
+  box-shadow: 2px 3px 6px rgba(0,0,0,0.15);
+}
+
+.main-title {
+  font-family: 'Caveat', cursive;
+  font-size: 3.4rem;
+  color: #4a3020;
+  letter-spacing: 2px;
+}
+
+.cat-corner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sleeping-cat {
+  font-size: 2.2rem;
+  margin-bottom: -10px;
+  z-index: 2;
+}
+
+.cat-books {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.c-book {
+  width: 75px;
+  height: 11px;
+  background: #fffdf9;
+  border: 2px solid #5c3d28;
+  border-radius: 3px;
+}
+
+.c-book:nth-child(2) {
+  width: 82px;
+  background: #f2e1d2;
+}
+
+.bookshelf {
+  display: flex;
+  flex-direction: column;
+}
+
+.shelf-row {
+  min-height: 230px;
+  padding: 25px 35px 12px 35px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 25px;
+  align-items: end;
+  background: linear-gradient(to bottom, #9c7554 0%, #c8a786 20%, #d7b899 100%);
+  border-bottom: 18px solid #8c6239;
+  box-shadow: inset 0 12px 15px -8px rgba(0,0,0,0.45),
+              inset 18px 0 15px -10px rgba(0,0,0,0.3),
+              inset -18px 0 15px -10px rgba(0,0,0,0.3);
+}
+
+.book-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.book-item:hover {
+  transform: translateY(-6px);
+}
+
+.book-cover {
+  width: 110px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 3px 6px 6px 3px;
+  border: 1px solid #3a2618;
+  border-left: 5px solid #4a3222;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.35);
+  background-color: #f4eee8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6px;
+  font-size: 0.8rem;
+  color: #5c3d28;
+}
+
+.book-stars {
+  margin-top: 6px;
+  background: rgba(58, 38, 24, 0.85);
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: #ffd166;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+}
+
+/* ==========================================
+   2. KARTA KNIHY (PŘIDÁNÍ / ÚPRAVA)
+   ========================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(25, 20, 17, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.book-sheet {
+  width: 100%;
+  max-width: 1200px;
+  background: #fdfbf7;
+  color: #3b2f2f;
+  border-radius: 8px;
+  padding: 24px 30px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  border: 3px solid #cbb59d;
+}
+
+.sheet-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px dashed #dcd0c0;
+}
+
+.right-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-primary, .btn-secondary, .btn-danger, .btn-small {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.btn-primary { background: #6b8e23; color: white; }
+.btn-primary:hover { background: #59781c; }
+
+.btn-secondary { background: #e6dacb; color: #4a3525; }
+.btn-secondary:hover { background: #d8c8b4; }
+
+.btn-danger { background: #d9534f; color: white; }
+.btn-small { background: #5c3d28; color: white; font-size: 0.85rem; padding: 6px 12px; display: inline-block; }
+
+/* HORNÍ ČÁST (3 SLOUPCE) */
+.top-grid {
+  display: grid;
+  grid-template-columns: 190px 1fr 440px;
+  gap: 28px;
+  align-items: start;
+}
+
+/* 1. Sloupec: Přebal knihy */
+.cover-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.cover-upload {
+  width: 175px;
+  height: 250px;
+  border: 4px solid #7cb342; /* Zelený rámeček podle skici */
+  border-radius: 4px;
+  background: #f5f2eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  text-align: center;
+  font-family: 'Caveat', cursive;
+  font-size: 1.8rem;
+  color: #6e6259;
+  transition: background 0.2s;
+}
+
+.cover-upload:hover {
+  background: #ebe5d9;
+}
+
+.cover-upload img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 2. Sloupec: Textová pole */
+.meta-column {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.form-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.form-row label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #5c4b3c;
+  min-width: 115px;
+  letter-spacing: 0.5px;
+}
+
+.form-row .inline-label {
+  min-width: auto;
+  padding: 0 6px;
+}
+
+.form-row input {
+  flex: 1;
+  border: none;
+  border-bottom: 1.5px solid #bda995;
+  background: transparent;
+  padding: 3px 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #2b2118;
+  outline: none;
+}
+
+.form-row input:focus {
+  border-bottom-color: #6b8e23;
+}
+
+/* Formát */
+.format-section {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.section-label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #5c4b3c;
+  text-align: center;
+}
+
+.format-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.divider {
+  color: #cbb59d;
+  font-size: 1.4rem;
+}
+
+.icon-choice {
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-size: 1.65rem;
+  padding: 4px 10px;
+  cursor: pointer;
+  opacity: 0.45;
+  transition: all 0.15s;
+}
+
+.icon-choice:hover {
+  opacity: 0.8;
+}
+
+.icon-choice.active {
+  opacity: 1;
+  border-color: #7cb342;
+  background: rgba(124, 179, 66, 0.12);
+}
+
+/* 3. Sloupec: Hodnocení 1-10 */
+.criteria-box {
+  border: 1.5px solid #a89481;
+  padding: 10px 14px;
+  border-radius: 4px;
+  background: #faf6f0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.criterion-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.88rem;
+}
+
+.criterion-name {
+  font-weight: 600;
+  color: #4a3b2c;
+}
+
+.num-scale {
+  display: flex;
+  gap: 3px;
+}
+
+.num-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.82rem;
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: #7a6a5a;
+  font-weight: 600;
+}
+
+.num-btn:hover {
+  background: #e6dacb;
+}
+
+.num-btn.active {
+  background: #5c3d28;
+  color: #fff;
+}
+
+/* Pod-sekce hodnocení (Celkové, Spice, Typ, Číst znova) */
+.sub-ratings-row {
+  display: grid;
+  grid-template-columns: 1.3fr 0.9fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+  align-items: start;
+}
+
+.stars-picker {
+  display: inline-flex;
+  gap: 4px;
+  font-size: 1.55rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.stars-picker.green-highlight {
+  background: rgba(124, 179, 66, 0.25);
+  padding: 2px 10px;
+  border-radius: 12px;
+  border: 2px solid #7cb342;
+}
+
+.star-char {
+  color: #cbb59d;
+  transition: color 0.1s;
+}
+
+.star-char.active {
+  color: #f59e0b;
+}
+
+.spice-picker {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.spice-char {
+  opacity: 0.25;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.spice-char.active {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.type-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 6px;
+  align-items: center;
+}
+
+.type-btn {
+  background: transparent;
+  border: 1.5px solid transparent;
+  border-radius: 20px; /* Vytvoří oválný tvar */
+  padding: 3px 12px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #6e5e50;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: fit-content;
+}
+
+.type-btn:hover {
+  background: rgba(124, 179, 66, 0.08);
+}
+
+.type-btn.active {
+  border-color: #7cb342; /* Zelený ovál jako u formátu */
+  background: rgba(124, 179, 66, 0.18);
+  color: #3b2f2f;
+}
+
+.reread-choices {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+/* SPODNÍ ČÁST: POPIS A MOODBOARD */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  gap: 28px;
+  margin-top: 24px;
+}
+
+/* Linkovaný papír na popis */
+.lined-paper {
+  width: 100%;
+  height: 360px;
+  border: 1.5px solid #a89481;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 28px;
+  background-color: #faf6f0;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    #dcd0c0 27px,
+    #dcd0c0 28px
+  );
+  resize: none;
+  outline: none;
+}
+
+/* Moodboard plátno */
+.moodboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  min-height: 32px;
+}
+
+.moodboard-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.img-toolbar {
+  display: flex;
+  gap: 4px;
+  background: #ebe2d5;
+  padding: 3px 6px;
+  border-radius: 6px;
+  border: 1px solid #cbb59d;
+}
+
+.img-toolbar button {
+  border: none;
+  background: #fff;
+  padding: 3px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.img-toolbar button:hover {
+  background: #f0e6d8;
+}
+
+.img-toolbar button.danger {
+  background: #d9534f;
+  color: white;
+}
+
+.moodboard-canvas {
+  width: 100%;
+  height: 360px;
+  border: 1.5px solid #a89481;
+  border-radius: 4px;
+  background: #f7f2ea;
+  position: relative;
+  overflow: hidden;
+}
+
+.moodboard-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #9c8c7c;
+  font-size: 0.95rem;
+  pointer-events: none;
+  padding: 20px;
+}
+
+.mood-img {
+  position: absolute;
+  cursor: grab;
+  user-select: none;
+  border: 2px solid transparent;
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+
+.mood-img:active {
+  cursor: grabbing;
+}
+
+.mood-img.selected {
+  border: 2px dashed #6b8e23;
+  box-shadow: 0 0 0 3px rgba(107, 142, 35, 0.25);
+}
+
+@media (max-width: 980px) {
+  .top-grid, .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.btn-small.edit-active {
+  background: #6b8e23;
+  box-shadow: 0 0 0 2px rgba(107, 142, 35, 0.35);
+}
+
+.moodboard-canvas.locked .mood-img {
+  cursor: default;
+}
