@@ -96,7 +96,7 @@ async function loadAndRenderLibrary() {
     const shelfBooks = books.slice(i * booksPerShelf, (i + 1) * booksPerShelf);
     shelfBooks.forEach(book => {
       const rating = Number(book.overallRating) || 0;
-      const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+      const stars = formatStarsHtml(book.overallRating);
 
       const bookEl = document.createElement('div');
       bookEl.className = 'book-item';
@@ -143,6 +143,7 @@ function createEmptyBook() {
     bookType: 'KNIHA',
     reread: '',
     overallRating: 5,
+    internetRating: 0,
     spiceLevel: 0,
     criteria: {},
     description: '',
@@ -218,21 +219,39 @@ function populateModalFields() {
 // INTERAKTIVNÍ PRVKY KARTY (Hvězdy, Spice, 1-10)
 // ==========================================
 function renderStars() {
-  const containers = ['leftStars', 'mainStars'];
-  containers.forEach(cid => {
-    const el = document.getElementById(cid);
+  const setupStarContainer = (containerId, propName, allowZero) => {
+    const el = document.getElementById(containerId);
+    if (!el) return;
     el.innerHTML = '';
+    const val = Number(currentBook[propName]) || 0;
+
     for (let i = 1; i <= 5; i++) {
       const span = document.createElement('span');
-      span.className = 'star-char' + (i <= currentBook.overallRating ? ' active' : '');
+      let stateClass = '';
+      if (val >= i) stateClass = ' active';
+      else if (val >= i - 0.5) stateClass = ' half';
+
+      span.className = 'star-char' + stateClass;
       span.textContent = '★';
-      span.onclick = () => {
-        currentBook.overallRating = i;
+
+      span.onclick = (e) => {
+        const rect = span.getBoundingClientRect();
+        // Kliknutí do levé poloviny hvězdy = X.5, do pravé poloviny = X.0
+        const isLeftHalf = (e.clientX - rect.left) < (rect.width / 2);
+        const newVal = isLeftHalf ? (i - 0.5) : i;
+
+        // Pokud klikne na úplně stejnou hodnotu u internetového hodnocení, vynuluje se
+        currentBook[propName] = (allowZero && currentBook[propName] === newVal) ? 0 : newVal;
         renderStars();
       };
+
       el.appendChild(span);
     }
-  });
+  };
+
+  // Levé hvězdičky (Internet) a pravé hvězdičky (Moje hodnocení)
+  setupStarContainer('leftStars', 'internetRating', true);
+  setupStarContainer('mainStars', 'overallRating', false);
 }
 
 function renderSpice() {
@@ -297,6 +316,20 @@ function selectReread(val) {
   document.querySelectorAll('[data-reread]').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.reread === val);
   });
+}
+function formatStarsHtml(ratingVal) {
+  const r = Number(ratingVal) || 0;
+  let html = '';
+  for (let i = 1; i <= 5; i++) {
+    if (r >= i) {
+      html += '★';
+    } else if (r >= i - 0.5) {
+      html += '<span class="half-star-display">★</span>';
+    } else {
+      html += '☆';
+    }
+  }
+  return html;
 }
 
 // ==========================================
